@@ -1,5 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from "@angular/forms";
+
+// Helper modules
+import { FlashMessagesModule } from "angular2-flash-messages";
 
 // Database and persistence
 import { environment } from "../environments/environment";
@@ -46,6 +50,8 @@ import { ClientService } from "./services/client.service";
     AngularFireModule.initializeApp(environment.firebase, 'clientpanel'),
     AngularFirestoreModule,
     AngularFireAuthModule,
+    FormsModule,
+    FlashMessagesModule.forRoot()
   ],
   providers: [ClientService],
   bootstrap: [AppComponent]
