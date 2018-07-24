@@ -15,7 +15,7 @@ import { Client } from "../../models/client";
 })
 export class AddClientComponent implements OnInit {
 
-  Client: Client = {
+  client: Client = {
     firstName: '',
     lastName: '',
     email: '',
