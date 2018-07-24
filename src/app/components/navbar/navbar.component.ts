@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 
+// Services
 import { AuthService } from "../../services/auth.service";
 import { FlashMessagesService } from 'angular2-flash-messages';
+import { SettingsService } from "../../services/settings.service";
 
 @Component({
   selector: 'app-navbar',
@@ -18,10 +20,15 @@ export class NavbarComponent implements OnInit {
   constructor(
     private _authService: AuthService,
     private _router: Router,
-    private _flashMessage: FlashMessagesService
+    private _flashMessage: FlashMessagesService,
+    private _settingsService: SettingsService
   ) { }
 
   ngOnInit() {
+    // Settings
+    this.showRegister = this._settingsService.getSettings().allowRegistration;
+
+    // Authentication check
     this._authService.getAuth().subscribe(auth => {
       if (auth) {
         this.isLoggedIn = true;
