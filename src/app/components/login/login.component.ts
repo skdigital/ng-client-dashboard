@@ -28,7 +28,6 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.email, this.password)
     this._authService.login(this.email, this.password)
       .then(res => {
         this._flashMessage.show('Login succesful', {
