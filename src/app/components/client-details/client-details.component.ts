@@ -22,7 +22,7 @@ export class ClientDetailsComponent implements OnInit {
     private _clientService: ClientService,
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
-    private _fashMessage: FlashMessagesService
+    private _flashMessage: FlashMessagesService
   ) { }
 
   ngOnInit() {
@@ -30,9 +30,23 @@ export class ClientDetailsComponent implements OnInit {
     this.id = this._activatedRoute.snapshot.params['id'];
     // Get client
     this._clientService.getClient(this.id).subscribe(client => {
+      if (client != null) {
+        if (client.balance > 0)
+          this.hasBalance = true;
+      }
       this.client = client;
       console.log(this.client)
     });
   }
 
+  onDeleteClick() {
+
+  }
+
+  updateBalance() {
+    this._clientService.updateClient(this.client);
+    this._flashMessage.show('Balance updated', {
+      cssClass: 'alert-success', timeout: 4000
+    });
+  }
 }

@@ -11,9 +11,11 @@ import { Client } from "../models/client";
 })
 export class ClientService {
 
+  // Multiple client retrieval properties
   clientsCollection: AngularFirestoreCollection<Client>;
-  clientDocument: AngularFirestoreDocument<Client>;
   clients: Observable<Client[]>;
+  // Singular client retreival properties
+  clientDocument: AngularFirestoreDocument<Client>;
   client: Observable<Client>;
 
   constructor(private afs: AngularFirestore) {
@@ -24,9 +26,9 @@ export class ClientService {
   getClients(): Observable<Client[]> {
     // Get client with the id
     this.clients = this.clientsCollection.snapshotChanges().pipe(
-      map(actions => actions.map(a => {
-        const data = a.payload.doc.data() as Client;
-        data.id = a.payload.doc.id;
+      map(res => res.map(r => {
+        const data = r.payload.doc.data() as Client;
+        data.id = r.payload.doc.id;
         return data;
       }))
     );
@@ -39,16 +41,21 @@ export class ClientService {
 
   getClient(id: string): Observable<Client> {
     this.clientDocument = this.afs.doc<Client>(`clients/${id}`);
-    this.client = this.clientDocument.snapshotChanges().pipe(map(action => {
-      if (action.payload.exists === false) {
+    this.client = this.clientDocument.snapshotChanges().pipe(map(res => {
+      if (res.payload.exists === false) {
         return null;
       } else {
-        const data = action.payload.data() as Client;
-        data.id = action.payload.id;
+        const data = res.payload.data() as Client;
+        data.id = res.payload.id;
         return data;
       }
     }))
     return this.client;
+  }
+
+  updateClient(client: Client) {
+    this.clientDocument = this.afs.doc(`clients/${client.id}`)
+    this.clientDocument.update(client);
   }
 }
 
